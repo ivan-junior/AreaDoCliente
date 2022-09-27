@@ -7,5 +7,6 @@ export type RootStackParamList = {
     'FAQ': undefined,
     'Ajuda': undefined,
     Logout: undefined,
-    Base: undefined
+    Base: undefined,
+    Home: undefined
 }
