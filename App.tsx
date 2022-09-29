@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { Main } from './screens/Main';
+import { Main } from './screens/Main/Main';
 import { RootStackParamList } from './types';
 
 type AppScreenProps = NativeStackScreenProps<RootStackParamList, 'Logout'>

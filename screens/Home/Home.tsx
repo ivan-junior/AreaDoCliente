@@ -1,13 +1,13 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Icon } from "@rneui/themed";
-import { RootStackParamList } from "../types";
-import Ajuda from "./Ajuda";
-import Dados from "./Dados";
-import { LogoutScreen } from "./Logout";
-import Perguntas from "./Perguntas";
-import { Sistema } from "./Sistema";
-import Status from "./Status";
+import { RootStackParamList } from "../../types";
+import { Faq } from "../Faq/Faq";
+import { Help } from "../Help/Help";
+import { LogoutScreen } from "../Logout/Logout";
+import { Profile } from "../Profile/Profile";
+import { Status } from "../Status/Status";
+import { Sistema } from "../System/Sistema";
 
 type AppScreenProps = NativeStackScreenProps<RootStackParamList, 'Logout'>
 export const Home: React.FC<AppScreenProps> = (props) => {
@@ -39,9 +39,9 @@ export const Home: React.FC<AppScreenProps> = (props) => {
         >
             <Tab.Screen name='Sistema' component={Sistema} options={{headerTitle: 'Seu Sistema'}} />
             <Tab.Screen name='Status' component={Status} />
-            <Tab.Screen name='Dados' component={Dados} />
-            <Tab.Screen name='FAQ' component={Perguntas} />
-            <Tab.Screen name='Ajuda' component={Ajuda} />
+            <Tab.Screen name='Dados' component={Profile} options={{headerTitle: 'Seus Dados'}} />
+            <Tab.Screen name='FAQ' component={Faq} options={{headerTitle: 'Perguntas Frequentes'}} />
+            <Tab.Screen name='Ajuda' component={Help} options={{headerTitle: 'Pedir ajuda'}} />
             <Tab.Screen name='Logout' component={LogoutScreen} />
         </Tab.Navigator>
     )

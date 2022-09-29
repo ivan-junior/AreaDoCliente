@@ -1,12 +1,20 @@
-import { Montserrat_400Regular, Montserrat_500Medium, Montserrat_600SemiBold, Montserrat_700Bold, useFonts } from '@expo-google-fonts/montserrat';
+import {
+    Montserrat_400Regular,
+    Montserrat_500Medium,
+    Montserrat_600SemiBold,
+    Montserrat_700Bold,
+    Montserrat_900Black,
+    useFonts
+} from '@expo-google-fonts/montserrat';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, Icon, Input, Text } from '@rneui/themed';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Image, StyleSheet, View } from 'react-native';
-import { authenticate } from '../services/authenticate';
-import { storeData } from '../services/storeData';
-import { RootStackParamList } from '../types';
+import { ActivityIndicator, Alert, Image, View } from 'react-native';
+import { authenticate } from '../../services/authenticate';
+import { storeData } from '../../services/storeData';
+import { RootStackParamList } from '../../types';
+import { styles } from './styles';
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>
 
@@ -40,13 +48,21 @@ export const Login: React.FC<LoginScreenProps> = ({navigation}) => {
         Montserrat_400Regular,
         Montserrat_500Medium, 
         Montserrat_600SemiBold,
-        Montserrat_700Bold
+        Montserrat_700Bold,
+        Montserrat_900Black
     })
     const entrar = async () => {
         setLoadingBtn(true)
         const login = await authenticate({email,password})
+        console.log(login)
         if (login.token != null && login.token != undefined) {
             await storeData('TOKEN', login.token)
+            await storeData('@userName', login.user.name)
+            await storeData('@userPhone', login.user.phone)
+            await storeData('@userEmail', login.user.email)
+            await storeData('@userAddress', login.user.address)
+            await storeData('@userProjectNumber', login.user.projectNumber[0].toString())
+            // await storeData('@userProfile', login.user.profile)
             setLoadingBtn(false)
             navigation.navigate('Home')
         } else {
@@ -89,11 +105,11 @@ export const Login: React.FC<LoginScreenProps> = ({navigation}) => {
             :
                 <View style={styles.container}>
                     <Image 
-                        source={require('../assets/bluesol-logo.png')}
+                        source={require('../../assets/bluesol-logo.png')}
                         style={styles.imgLogo}
                     />
                     <Text
-                        style={{marginBottom: 35, color: 'white', fontFamily: 'Montserrat_700Bold', fontSize: 30}}
+                        style={styles.mainTitle}
                     >
                         Área do Cliente
                     </Text>
@@ -109,7 +125,7 @@ export const Login: React.FC<LoginScreenProps> = ({navigation}) => {
                             />
                         }
                         onChangeText={value => setEmail(value)}
-                        inputStyle={{color: 'white', fontFamily: 'Montserrat_600SemiBold'}}
+                        inputStyle={[styles.fontMontserrat600, styles.colorWhite]}
                         inputContainerStyle={styles.inputContainerStyle}
                         keyboardType='email-address'
                         placeholderTextColor='white'
@@ -138,7 +154,7 @@ export const Login: React.FC<LoginScreenProps> = ({navigation}) => {
                                     />
                         }
                         onChangeText={value => setPassword(value)}
-                        inputStyle={{color: 'white', fontFamily: 'Montserrat_600SemiBold'}}
+                        inputStyle={[styles.fontMontserrat600, styles.colorWhite]}
                         inputContainerStyle={styles.inputContainerStyle}
                         placeholderTextColor='white'
                         secureTextEntry={showPassword}
@@ -148,18 +164,9 @@ export const Login: React.FC<LoginScreenProps> = ({navigation}) => {
                         loading={isLoadingBtn}
                         loadingProps={{ color: '#054E7D' }}
                         
-                        buttonStyle={{
-                            backgroundColor: '#f9b51b',
-                            borderRadius: 7,
-                            height: 70
-                        }}
-                        titleStyle={{ fontSize: 24, fontFamily: 'Montserrat_700Bold' }}
-                        containerStyle={{
-                            marginTop: 10,
-                            width: '100%',
-                            paddingLeft: 10,
-                            paddingRight: 10
-                        }}
+                        buttonStyle={styles.button}
+                        titleStyle={[styles.fontMontserrat700, styles.fontSize24]}
+                        containerStyle={styles.containerButton}
                         onPress={() => entrar()}
                     />
                 </View>
@@ -167,27 +174,3 @@ export const Login: React.FC<LoginScreenProps> = ({navigation}) => {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#2265db',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    imgLogo: {
-        width: 200,
-        height: 42,
-        marginBottom: 35
-    },
-    inputContainerStyle: {
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderRadius: 7, 
-        marginTop: 5,
-        paddingLeft: 10,
-        height: 80,
-        borderColor: 'white'
-    },
-});
-  

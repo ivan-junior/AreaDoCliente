@@ -7,7 +7,7 @@ interface IResponseLogin {
 		profile: string,
 		added: string,
 		projectNumber: [
-			number
+			string
 		]
     },
     token: string

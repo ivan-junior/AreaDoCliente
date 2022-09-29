@@ -2,11 +2,12 @@ import { Lato_400Regular, Lato_700Bold, Lato_900Black, useFonts } from "@expo-go
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Card, Text } from "@rneui/themed";
 import { format } from "date-fns";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import NumberFormat from "react-number-format";
-import { useFetch } from "../hooks/useFetch";
-import { ISystemResponse } from "../interfaces/systemResponse";
-import { RootStackParamList } from "../types";
+import { useFetch } from "../../hooks/useFetch";
+import { ISystemResponse } from "../../interfaces/systemResponse";
+import { RootStackParamList } from "../../types";
+import { styles } from "./styles";
 
 type SistemaScreenProps = NativeStackScreenProps<RootStackParamList, 'Sistema'>
 
@@ -91,31 +92,3 @@ export const Sistema: React.FC<SistemaScreenProps> = (props) => {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    systemTitle: {
-        fontFamily: 'Lato_900Black',
-        fontSize: 35
-    },
-    systemRow: {
-        flexDirection: 'row', 
-        justifyContent: 'space-between', 
-        marginBottom: 10,
-        borderBottomWidth: 3,
-        borderBottomColor: '#f9b51b',
-        paddingBottom: 15
-    },
-    systemLabel: {
-        fontSize: 20, 
-        fontFamily: 'Lato_700Bold'
-    },
-    systemField: {
-        fontSize: 20, 
-        fontFamily: 'Lato_400Regular'
-    }
-})
