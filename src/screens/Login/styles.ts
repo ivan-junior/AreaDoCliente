@@ -5,15 +5,21 @@ export const styles = StyleSheet.create({
         backgroundColor: "white",
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
     },
+    flex1: {
+        flex: 1
+    },
+    flexGrow1: {
+        flexGrow: 1
+    },
     container: {
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     imgLogo: {
         width: 100,
         height: 21,
         marginBottom: 5,
-        marginTop: 10
+        marginTop: 20
     },
     imgAreaCliente: {
         width: 200,
@@ -58,8 +64,44 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold', 
         fontSize: 24 
     },
-    forgotPassword: {
-
+    forgotPasswordTouchable: {
+        width: '100%', 
+        padding: 10, 
+        marginTop: 20
+    },
+    forgotPasswordText: {
+        textAlign: 'left', 
+        fontFamily: 'Lato_400Regular', 
+        color: 'white', 
+        fontSize: 20
+    },
+    dialogOverlay: {
+        width: '98%'
+    },
+    dialogTitle: {
+        marginLeft: 10
+    },
+    dialogButton: {
+        borderWidth: 1, 
+        marginRight: 10, 
+        backgroundColor: '#084578', 
+        borderColor: '#084578'
+    },
+    dialogButtonTitle: {
+        color: 'white', 
+        fontFamily: 'Lato_400Regular'
+    },
+    projectNotShowingTouchable: {
+        width: '100%', 
+        padding: 10, 
+        flexDirection: 'row', 
+        alignItems: 'center'
+    },
+    projectNotShowingText: {
+        textAlign: 'left', 
+        fontFamily: 'Lato_400Regular', 
+        color: 'white', 
+        fontSize: 20
     },
     fontMontserrat600: {
         fontFamily: 'Montserrat_600SemiBold'

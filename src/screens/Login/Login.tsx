@@ -14,6 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../../../types';
 import { authenticate, forgotPassword } from '../../services/bsApi';
 import { storeData } from '../../services/storeData';
+import { isEmail } from '../../utils/utils';
 import { styles } from './styles';
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>
@@ -47,6 +48,8 @@ export const Login: React.FC<LoginScreenProps> = ({navigation}) => {
     const [isDialogVisible, setIsDialogVisible] = useState(false)
     const [isLoadingDialogBtn, setIsLoadingDialogBtn] = useState(false)
     const [emailDialogInput, setEmailDialogInput] = useState('')
+    const [emailErrorMessage, setEmailErrorMessage] = useState('')
+    
     let [fontsLoaded] = useFonts({
         Lato_400Regular,
         Lato_700Bold,
@@ -110,133 +113,137 @@ export const Login: React.FC<LoginScreenProps> = ({navigation}) => {
                     <ActivityIndicator size={'large'} color='white' />
                 </View>
             :
-            <SafeAreaView style={{flex: 1}}>
-                <ScrollView>
-                    <LinearGradient 
+            <SafeAreaView style={styles.flex1}>
+                <ScrollView contentContainerStyle={styles.flexGrow1}>
+                    <LinearGradient
                         style={styles.container}
                         colors={['rgba(255,147,0,1)','rgba(255,185,0,1)']}
                     >
-
-                        
-                        <Image 
-                            source={require('../../assets/bluesol-logo.png')}
-                            style={styles.imgLogo}
-                        />
-                        <Image 
-                            source={require('../../assets/casa.png')}
-                            style={styles.imgAreaCliente}
-                        />
-                        <Text
-                            style={styles.mainTitle}
-                        >
-                            Área do Cliente
-                        </Text>
-                        <Input
-                            placeholder='Seu email'
-                            rightIcon={
+                        {/* <View style={styles.container}> */}
+                            <Image 
+                                source={require('../../assets/bluesol-logo.png')}
+                                style={styles.imgLogo}
+                            />
+                            <Image 
+                                source={require('../../assets/casa.png')}
+                                style={styles.imgAreaCliente}
+                            />
+                            <Text
+                                style={styles.mainTitle}
+                            >
+                                Área do Cliente
+                            </Text>
+                            <Input
+                                placeholder='Seu email'
+                                rightIcon={
+                                    <Icon
+                                        name='envelope'
+                                        size={30}
+                                        color='white'
+                                        type='font-awesome-5'
+                                        style={{paddingRight: 15}}
+                                    />
+                                }
+                                onChangeText={value => setEmail(value)}
+                                inputStyle={[styles.fontLato700, styles.colorWhite]}
+                                inputContainerStyle={styles.inputContainerStyle}
+                                keyboardType='email-address'
+                                placeholderTextColor='white'
+                                errorMessage={emailErrorMessage}
+                                errorStyle={styles.fontLato400}
+                                onBlur={() => isEmail(email as string)? setEmailErrorMessage('') : setEmailErrorMessage('Insira um email válido')}
+                            />
+                            <Input
+                                placeholder='Sua senha'
+                                rightIcon={
+                                    showPassword
+                                        ?
+                                            <Icon
+                                                name='eye'
+                                                size={30}
+                                                color='white'
+                                                type='font-awesome'
+                                                style={{paddingRight: 15}}
+                                                onPress={() => setShowPassword(!showPassword)}
+                                            />
+                                        :
+                                            <Icon
+                                                name='eye-slash'
+                                                size={30}
+                                                color='white'
+                                                type='font-awesome'
+                                                style={{paddingRight: 15}}
+                                                onPress={() => setShowPassword(!showPassword)}
+                                            />
+                                }
+                                onChangeText={value => setPassword(value)}
+                                inputStyle={[styles.fontLato700, styles.colorWhite]}
+                                inputContainerStyle={styles.inputContainerStyle}
+                                placeholderTextColor='white'
+                                secureTextEntry={showPassword}
+                            />
+                            <Button
+                                title="ENTRAR"
+                                loading={isLoadingBtn}
+                                loadingProps={{ color: 'white' }}
+                                
+                                buttonStyle={styles.button}
+                                titleStyle={[styles.fontLato900, styles.fontSize24]}
+                                containerStyle={styles.containerButton}
+                                onPress={() => entrar()}
+                            />
+                            <TouchableOpacity style={styles.forgotPasswordTouchable} onPress={() => setIsDialogVisible(!isDialogVisible)}>
+                                <Text style={styles.forgotPasswordText}>
+                                    Esqueci minha senha
+                                </Text>
+                            </TouchableOpacity>
+                            <Dialog
+                                isVisible={isDialogVisible}
+                                onBackdropPress={() => setIsDialogVisible(!isDialogVisible)}
+                                overlayStyle={styles.dialogOverlay}
+                            >
+                                <Dialog.Title title='Redefinição de senha' titleStyle={styles.dialogTitle} />
+                                <Input
+                                    placeholder='Digite seu email'
+                                    onChangeText={value => setEmailDialogInput(value)}
+                                    inputStyle={[styles.fontLato400]}
+                                    inputContainerStyle={styles.inputContainerStyleDialog}
+                                    keyboardType='email-address'
+                                />
+                                <Dialog.Actions>
+                                    <Dialog.Button 
+                                        title={'CANCELAR'}
+                                        buttonStyle={styles.dialogButton}
+                                        titleStyle={styles.dialogButtonTitle}
+                                        onPress={() => setIsDialogVisible(!isDialogVisible)}
+                                    />
+                                    <Dialog.Button 
+                                        title={'ENVIAR'}
+                                        buttonStyle={styles.dialogButton}
+                                        titleStyle={styles.dialogButtonTitle}
+                                        onPress={() => sendEmailForgotPassword()}
+                                        loading={isLoadingDialogBtn}
+                                        loadingProps={styles.colorWhite}
+                                    />
+                                </Dialog.Actions>
+                            </Dialog>
+                            <TouchableOpacity style={styles.projectNotShowingTouchable}
+                                onPress={() => {
+                                    Alert.alert('Seu projeto não aparece?', 'Os dados de acesso são enviados por e-mail alguns dias após assinado o contrato, caso ainda não tenha recebido ou não consiga fazer o login, entre em contato com o nosso pós-venda pelo e-mail posvenda@bluesol.com.br')
+                                }}
+                            >
+                                <Text style={styles.projectNotShowingText}>
+                                    Seu projeto não aparece?
+                                </Text>
                                 <Icon
-                                    name='envelope'
-                                    size={30}
+                                    name='question-circle'
+                                    size={20}
                                     color='white'
                                     type='font-awesome-5'
-                                    style={{paddingRight: 15}}
+                                    style={{paddingLeft: 10}}
                                 />
-                            }
-                            onChangeText={value => setEmail(value)}
-                            inputStyle={[styles.fontLato700, styles.colorWhite]}
-                            inputContainerStyle={styles.inputContainerStyle}
-                            keyboardType='email-address'
-                            placeholderTextColor='white'
-                        />
-                        <Input
-                            placeholder='Sua senha'
-                            rightIcon={
-                                showPassword
-                                    ?
-                                        <Icon
-                                            name='eye'
-                                            size={30}
-                                            color='white'
-                                            type='font-awesome'
-                                            style={{paddingRight: 15}}
-                                            onPress={() => setShowPassword(!showPassword)}
-                                        />
-                                    :
-                                        <Icon
-                                            name='eye-slash'
-                                            size={30}
-                                            color='white'
-                                            type='font-awesome'
-                                            style={{paddingRight: 15}}
-                                            onPress={() => setShowPassword(!showPassword)}
-                                        />
-                            }
-                            onChangeText={value => setPassword(value)}
-                            inputStyle={[styles.fontLato700, styles.colorWhite]}
-                            inputContainerStyle={styles.inputContainerStyle}
-                            placeholderTextColor='white'
-                            secureTextEntry={showPassword}
-                        />
-                        <Button
-                            title="ENTRAR"
-                            loading={isLoadingBtn}
-                            loadingProps={{ color: '#054E7D' }}
-                            
-                            buttonStyle={styles.button}
-                            titleStyle={[styles.fontLato900, styles.fontSize24]}
-                            containerStyle={styles.containerButton}
-                            onPress={() => entrar()}
-                        />
-                        <TouchableOpacity style={{width: '100%', padding: 10, marginTop: 20}} onPress={() => setIsDialogVisible(!isDialogVisible)}>
-                            <Text style={{textAlign: 'left', fontFamily: 'Lato_400Regular', color: 'white', fontSize: 20}}>
-                                Esqueci minha senha
-                            </Text>
-                        </TouchableOpacity>
-                        <Dialog
-                            isVisible={isDialogVisible}
-                            onBackdropPress={() => setIsDialogVisible(!isDialogVisible)}
-                            overlayStyle={{width: '98%'}}
-                        >
-                            <Dialog.Title title='Redefinição de senha' titleStyle={{marginLeft: 10}} />
-                            <Input
-                                placeholder='Digite seu email'
-                                onChangeText={value => setEmailDialogInput(value)}
-                                inputStyle={[styles.fontLato400]}
-                                inputContainerStyle={styles.inputContainerStyleDialog}
-                                keyboardType='email-address'
-                            />
-                            <Dialog.Actions>
-                                <Dialog.Button 
-                                    title={'CANCELAR'}
-                                    buttonStyle={{borderWidth: 1, marginRight: 10, backgroundColor: '#084578', borderColor: '#084578'}}
-                                    titleStyle={{color: 'white', fontFamily: 'Lato_400Regular'}}
-                                    onPress={() => setIsDialogVisible(!isDialogVisible)}
-                                />
-                                <Dialog.Button 
-                                    title={'ENVIAR'}
-                                    buttonStyle={{borderWidth: 1, marginRight: 10, backgroundColor: '#084578', borderColor: '#084578'}}
-                                    titleStyle={{color: 'white', fontFamily: 'Lato_400Regular'}}
-                                    onPress={() => sendEmailForgotPassword()}
-                                    loading={isLoadingDialogBtn}
-                                />
-                            </Dialog.Actions>
-                        </Dialog>
-                        <TouchableOpacity style={{width: '100%', padding: 10, flexDirection: 'row', alignItems: 'center'}}
-                            onPress={() => {
-                                Alert.alert('Seu projeto não aparece?', 'Os dados de acesso são enviados por e-mail alguns dias após assinado o contrato, caso ainda não tenha recebido ou não consiga fazer o login, entre em contato com o nosso pós-venda pelo e-mail posvenda@bluesol.com.br')
-                            }}
-                        >
-                            <Text style={{textAlign: 'left', fontFamily: 'Lato_400Regular', color: 'white', fontSize: 20}}>
-                                Seu projeto não aparece?
-                            </Text>
-                            <Icon
-                                name='question-circle'
-                                size={20}
-                                color='white'
-                                type='font-awesome-5'
-                                style={{paddingLeft: 10}}
-                            />
-                        </TouchableOpacity>
+                            </TouchableOpacity>
+                        {/* </View> */}
                     </LinearGradient>
                 </ScrollView>
             </SafeAreaView>

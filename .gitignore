@@ -9,6 +9,9 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+android/keystores
+ios/certs
+credentials.json
 
 # macOS
 .DS_Store

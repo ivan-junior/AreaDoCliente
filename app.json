@@ -4,12 +4,12 @@
     "slug": "BSAreaDoCliente",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/mobile.png",
+    "icon": "./src/assets/icon-2.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./src/assets/splash.png",
+      "image": "./src/assets/splash-2.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FF9300"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,13 +24,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./src/assets/adaptive-icon-2.png",
+        "backgroundColor": "#ff9600"
       },
       "package": "br.com.bluesol.areadocliente"
     },
     "web": {
-      "favicon": "./src/assets/favicon.png"
+      "favicon": "./src/assets/favicon-2.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4c3e9403-0f11-487e-926f-199d39688b23"
+      }
     }
   }
 }
